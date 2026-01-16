@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PKR Tax & Bank Charges Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f7fa;
+      padding: 20px;
+    }
+    .card {
+      max-width: 520px;
+      margin: auto;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    }
+    h2 {
+      margin-bottom: 16px;
+    }
+    label {
+      font-weight: 600;
+      display: block;
+      margin-top: 12px;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 6px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button {
+      margin-top: 16px;
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      background: #2563eb;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 20px;
+      background: #f1f5f9;
+      padding: 12px;
+      border-radius: 8px;
+    }
+    .row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>PKR Tax & Bank Charges Calculator</h2>
+
+    <label>Actual Price (PKR)</label>
+    <input type="number" id="actualPrice" value="8403" />
+
+    <label>Bank Charges % (default 4.5%)</label>
+    <input type="number" id="bankPercentage" value="4.5" step="0.1" />
+
+    <label>Tax Status</label>
+    <select id="taxStatus">
+      <option value="5" selected>Filer (5%)</option>
+      <option value="10">Non-Filer (10%)</option>
+    </select>
+
+    <label>FED % on Filer/Non-Filer Tax (default 15%)</label>
+    <input type="number" id="fedPercentage" value="15" step="1" />
+
+    <button onclick="calculate()">Calculate</button>
+
+    <div class="result" id="result" style="display:none;">
+      <div class="row"><span>Bank Charges:</span><span id="bankCharges"></span></div>
+      <div class="row"><span>Filer Tax:</span><span id="filerTax"></span></div>
+      <div class="row"><span>FED Amount:</span><span id="fedAmount"></span></div>
+      <hr />
+      <div class="row"><strong>Total Tax Deduction:</strong><strong id="totalTax"></strong></div>
+      <div class="row"><strong>Total Amount (Including Deductions):</strong><strong id="totalAmount"></strong></div>
+    </div>
+  </div>
+
+  <script>
+    function calculate() {
+      const actualPrice = parseFloat(document.getElementById('actualPrice').value) || 0;
+      const bankPercentage = parseFloat(document.getElementById('bankPercentage').value) / 100;
+      const filerPercentage = parseFloat(document.getElementById('taxStatus').value) / 100;
+      const fedPercentage = parseFloat(document.getElementById('fedPercentage').value) / 100;
+
+      const bankCharges = actualPrice * bankPercentage;
+      const filerTaxAmount = actualPrice * filerPercentage;
+      const fedAmount = filerTaxAmount * fedPercentage;
+
+      const totalTax = bankCharges + filerTaxAmount + fedAmount;
+      const totalAmount = actualPrice + totalTax;
+
+      document.getElementById('bankCharges').innerText = bankCharges.toFixed(2) + ' PKR';
+      document.getElementById('filerTax').innerText = filerTaxAmount.toFixed(2) + ' PKR';
+      document.getElementById('fedAmount').innerText = fedAmount.toFixed(2) + ' PKR';
+      document.getElementById('totalTax').innerText = totalTax.toFixed(2) + ' PKR';
+      document.getElementById('totalAmount').innerText = totalAmount.toFixed(2) + ' PKR';
+
+      document.getElementById('result').style.display = 'block';
+    }
+
+    calculate(); // auto calculate on load
+  </script>
+</body>
+</html>
